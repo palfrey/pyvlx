@@ -3,6 +3,7 @@ import asyncio
 
 from .api import GetState
 from .exception import PyVLXException
+from .log import PYVLXLOG
 
 
 class Heartbeat:
@@ -59,6 +60,9 @@ class Heartbeat:
     async def pulse(self):
         """Send get state request to API to keep the connection alive."""
         get_state = GetState(pyvlx=self.pyvlx)
+        PYVLXLOG.debug("Heartbeat start")
         await get_state.do_api_call()
         if not get_state.success:
             raise PyVLXException("Unable to send get state.")
+        else:
+            PYVLXLOG.debug("Heartbeat state: %s", get_state)

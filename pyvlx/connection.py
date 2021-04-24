@@ -78,12 +78,14 @@ class Connection:
     def disconnect(self):
         """Disconnect connection."""
         if self.transport is not None:
+            PYVLXLOG.debug("Disconnect")
             self.transport.close()
             self.transport = None
 
     async def connect(self):
         """Connect to gateway via SSL."""
         tcp_client = TCPTransport(self.frame_received_cb, self.connection_closed_cb)
+        PYVLXLOG.debug("Connecting... %s", self.connection_counter)
         self.transport, _ = await self.loop.create_connection(
             lambda: tcp_client,
             host=self.config.host,
@@ -92,6 +94,7 @@ class Connection:
         )
         self.connected = True
         self.connection_counter += 1
+        PYVLXLOG.debug("Connected %s", self.connection_counter)
 
     def register_frame_received_cb(self, callback):
         """Register frame received callback."""
@@ -125,4 +128,5 @@ class Connection:
 
     def connection_closed_cb(self):
         """Server closed connection."""
+        PYVLXLOG.debug("Server closed connection")
         self.connected = False

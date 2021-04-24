@@ -33,7 +33,7 @@ class ApiEvent:
         await self.pyvlx.send_frame(self.request_frame())
 
     def request_frame(self):
-        """Construct initiating framw."""
+        """Construct initiating frame."""
         raise NotImplementedError("send_frame has to be implemented")
 
     async def response_rec_callback(self, frame):
